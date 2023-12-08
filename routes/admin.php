@@ -7,43 +7,27 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-// Admin Routes for Users, Products, Roles, and Permissions
 Route::middleware("can:role,'admin'")->group(function () {
 
-    // Users
-    Route::resource('users', UserController::class)->names('admin.users')->except(['show']);
+    //users route
+    Route::resource('users', UserController::class)->names('admin.users');
+    Route::get('users/{user}/delete', [UserController::class, 'destroy'])->name('admin.users.destroy');
+    Route::get('datatable/users', [DataTableController::class, 'users'])
+        ->name('datatable.users');
 
-    // Products
-    Route::resource('products', ProductController::class)->names('admin.products')->except(['show']);
+    //roles route
+    Route::resource('roles', RoleController::class)->names('admin.roles');
+    Route::get('roles/{role}/delete', [RoleController::class, 'destroy'])->name('admin.roles.destroy');
 
-    // Roles
-    Route::resource('roles', RoleController::class)->names('admin.roles')->except(['show']);
-
-    // Permissions
-    Route::resource('permissions', PermissionController::class)->names('admin.permissions')->except(['show']);
-
+    //permissions route
+    Route::resource('permissions', PermissionController::class)->names('admin.permissions');
+    Route::get('permissions/{permission}/delete', [PermissionController::class, 'destroy'])->name('admin.permissions.destroy');
 });
 
-// Employee Routes for Products with specific permissions
 Route::middleware("can:role,'admin','employee'")->group(function () {
-
-    // Products
-    Route::resource('products', ProductController::class)->names('admin.products')->except(['show'])
-        ->middleware("can:permission,'show product|create product|update product|delete product'");
-
-});
-
-// DataTable Routes for Users and Products
-Route::prefix('datatable')->group(function () {
-
-    // Users DataTable
-    Route::get('users', [DataTableController::class, 'users'])
-        ->name('datatable.users')
-        ->middleware("can:permission,'view user'");
-
-    // Products DataTable
-    Route::get('products', [DataTableController::class, 'products'])
-        ->name('datatable.products')
-        ->middleware("can:permission,'show product'");
-
+    //Product route
+    Route::resource('products', ProductController::class)->names('admin.products');
+    Route::get('products/{product}/delete', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+    Route::get('datatable/products', [DataTableController::class, 'products'])
+        ->name('datatable.products');
 });

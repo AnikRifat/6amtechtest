@@ -14,6 +14,7 @@ class ProductController extends Controller
 {
     public function index()
     {
+        $this->authorize('permission', 'show product');
         $products = Product::all();
 
         return view('admin.pages.products.index', compact('products'));
@@ -21,6 +22,7 @@ class ProductController extends Controller
 
     public function create()
     {
+        $this->authorize('permission', 'create product');
         $product = false;
 
         return view('admin.pages.products.view', compact('product'));
@@ -28,6 +30,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('permission', 'create product');
         $data = $request->validate([
             'name' => [
                 'required',
@@ -53,11 +56,14 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        $this->authorize('permission', 'update product');
+
         return view('admin.pages.products.view', compact('product'));
     }
 
     public function update(Request $request, Product $product)
     {
+        $this->authorize('permission', 'update product');
         $data = $request->validate([
             'name' => [
                 'required',
@@ -81,6 +87,7 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        $this->authorize('permission', 'delete product');
         $product->delete();
 
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully');
