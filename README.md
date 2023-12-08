@@ -14,9 +14,9 @@ git clone https://github.com/AnikRifat/6amtechtest.git
 cd blog
 =======
 cd 6amtechtest
->>>>>>> 86e0d2f3e3fd5c89fb1f90a211c0a66dd7061e19
 composer install
 cp .env.example .env
+>>>>>>> then setup the db
 php artisan key:generate
 php artisan migrate:fresh --seed
 
